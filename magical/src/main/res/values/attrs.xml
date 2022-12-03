@@ -1,0 +1,67 @@
+<resources>
+
+
+    <!-- 线样式 -->
+    <declare-styleable name="GmLineStyle">
+        <!-- 线颜色 -->
+        <attr name="gm_line_color" format="color" />
+        <!-- 线宽 -->
+        <attr name="gm_line_width" format="dimension" />
+        <!-- 线条透明度[0,100] -->
+        <attr name="gm_line_alpha" format="integer" />
+        <!-- 线条图片 -->
+        <attr name="gm_line_bmp" format="reference" />
+    </declare-styleable>
+
+    <!-- 填充样式 -->
+    <declare-styleable name="GmFillStyle">
+        <!-- 填充颜色 -->
+        <attr name="gm_fill_color" format="color" />
+        <!-- 填充透明度[0,100] -->
+        <attr name="gm_fill_alpha" format="integer" />
+        <!-- 填充图片 -->
+        <attr name="gm_fill_bmp" format="reference" />
+
+        <!-- 线颜色 -->
+        <attr name="gm_outline_color" format="color" />
+        <!-- 线宽 -->
+        <attr name="gm_outline_width" format="dimension" />
+        <!-- 线条透明度[0,100] -->
+        <attr name="gm_outline_alpha" format="integer" />
+        <!-- 线条图片 -->
+        <attr name="gm_outline_bmp" format="reference" />
+    </declare-styleable>
+
+    <!-- 点样式 -->
+    <declare-styleable name="GmPointStyle">
+        <!-- 填充颜色 -->
+        <attr name="gm_point_color" format="color" />
+        <!-- 填充透明度[0,100] -->
+        <attr name="gm_point_alpha" format="integer" />
+        <!-- 填充大小，点类型的时候 -->
+        <attr name="gm_point_size" format="dimension" />
+        <!-- 填充图片 -->
+        <attr name="gm_point_bmp" format="reference" />
+    </declare-styleable>
+
+    <!-- 文本样式 -->
+    <declare-styleable name="GmTextStyle">
+        <!-- 字体大小 -->
+        <attr name="gm_font_size" format="dimension" />
+        <!-- 字体颜色 -->
+        <attr name="gm_font_color" format="color" />
+        <!-- 字体透明度 -->
+        <attr name="gm_font_alpha" format="integer" />
+        <!-- 字体边描边宽度 -->
+        <attr name="gm_font_stroke_width" format="dimension" />
+        <!-- 字体边描边颜色 -->
+        <attr name="gm_font_stroke_color" format="color" />
+        <!-- 字体边框宽度 -->
+        <attr name="gm_text_border_width" format="dimension" />
+        <!-- 字体边框颜色 -->
+        <attr name="gm_text_border_color" format="color" />
+        <!-- 字体边背景颜色 -->
+        <attr name="gm_text_background_color" format="color" />
+    </declare-styleable>
+
+</resources>

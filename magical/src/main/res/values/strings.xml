@@ -1,0 +1,4 @@
+<resources>
+    <string name="mg_map_tdt_basemap">天地图影像</string>
+    <string name="mg_map_tdt_cva">天地图电子注记</string>
+</resources>
