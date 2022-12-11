@@ -87,7 +87,7 @@ abstract class MapLayer : LifecycleEventObserver {
         get() = mMapViewRef?.get()?.getBaseMapView()
 
     /** 地图 */
-    protected val magicalMapView: MagicalMapView?
+    val magicalMapView: MagicalMapView?
         get() = mMapViewRef?.get()
 
     /**
@@ -161,6 +161,10 @@ abstract class MapLayer : LifecycleEventObserver {
         this.mIsAttach = false
         this.mIsDetach = true
         this.onAttachListener = null
+    }
+
+    internal fun onPrepareError() {
+        onAttachListener = null
     }
 
     /**
@@ -324,5 +328,6 @@ abstract class MapLayer : LifecycleEventObserver {
     }
 
     override fun toString(): String = layerInfo.toString()
+
 
 }

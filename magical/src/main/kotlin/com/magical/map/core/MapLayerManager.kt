@@ -90,27 +90,26 @@ class MapLayerManager(
      * 添加图层
      * 先添加到图层列表，然后再添加到地图图层，最后刷新地图重新排序
      */
-    fun addLayer(layerInfo: LayerInfo) {
+    fun addLayer(layerInfo: LayerInfo): MapLayer {
         if (layers.contains(layerInfo.name)) {
             MapLog.w("图层已经添加：$layerInfo")
-            return
+            return layers[layerInfo.name]!!
         }
         // 实例化图层并触发准备动作
-        try {
-            this.addLayer(layerInfo.create())
-        } catch (e: Throwable) {
-            MapLog.e("添加图层信息异常：$layerInfo", "LayerManager", e)
-        }
+        val layer = layerInfo.create()
+        this.addLayer(layer)
+        return layer
     }
 
     /**
      * 添加图层，调用该方法时图层必须设置layerInfo
      */
-    fun addLayer(layer: MapLayer) = mScope.launch(mDispatcher) {
+    private fun addLayer(layer: MapLayer) = mScope.launch(mDispatcher) {
         val layerInfo = layer.layerInfo
         MapLog.d("添加图层：$layerInfo")
         val result = layer.prepare(context, layerInfo, mapView)
         if (!result.successfully) {
+            layer.onPrepareError()
             MapLog.e("图层准备失败：$result, 图层信息：$layerInfo")
             return@launch
         }
@@ -159,6 +158,13 @@ class MapLayerManager(
     }
 
     /**
+     * 根据具体的图层类获取图层集合
+     */
+    fun <T : MapLayer> getLayers(clazz: Class<T>, name: String? = null): List<MapLayer> {
+        return layers.filter { if (name.isNullOrEmpty()) it::class.java == clazz else it::class.java == clazz && it.name == name }
+    }
+
+    /**
      * 根据图层类型获取图层
      */
     fun getLayer(type: LayerType, name: String? = null): List<MapLayer> {
@@ -181,6 +187,22 @@ class MapLayerManager(
             if (layer == it) return@forEach
             it.performExclusiveModeChanged(exclusive)
         }
+    }
+
+    /**
+     * 图层重新排序
+     */
+    fun resortLayer(layerInfoList: List<LayerInfo>) {
+        val map = mutableMapOf<String, Int>()
+        layerInfoList.forEach { map[it.name] = it.orderNo }
+        layers.forEach {
+            if (map.contains(it.name)) {
+                it.layerInfo.orderNo = map[it.name]!!
+            }
+        }
+        layers.sort()
+        // 通知地图进行排序
+        mapView.resortLayers(layers)
     }
 
 }

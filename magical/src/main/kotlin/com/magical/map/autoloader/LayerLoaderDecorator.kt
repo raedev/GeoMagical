@@ -8,7 +8,7 @@ import com.magical.map.layer.LayerInfo
  * @date 2022/11/17
  * @copyright Copyright (c) https://github.com/raedev All rights reserved.
  */
-internal abstract class LayerLoaderDecorator(
+abstract class LayerLoaderDecorator(
     protected val wrapper: LayerLoader
 ) : LayerLoader(wrapper.mapContext) {
 

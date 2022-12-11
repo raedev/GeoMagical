@@ -17,4 +17,8 @@ class LineMapStyle(context: Context, name: String, override val styleId: Int) :
     override fun parseStyle(helper: MapStyleParseHelper): MapSymbol {
         return helper.parseLine()
     }
+
+    init {
+        loadStyle()
+    }
 }

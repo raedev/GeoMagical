@@ -17,4 +17,8 @@ class PointMapStyle(context: Context, name: String, override val styleId: Int) :
     override fun parseStyle(helper: MapStyleParseHelper): MapSymbol {
         return helper.parsePoint()
     }
+
+    init {
+        loadStyle()
+    }
 }

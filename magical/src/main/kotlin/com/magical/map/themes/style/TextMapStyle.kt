@@ -22,4 +22,8 @@ class TextMapStyle(context: Context, name: String, override val styleId: Int) :
     override fun parseStyle(helper: MapStyleParseHelper): MapSymbol {
         return helper.parseText()
     }
+
+    init {
+        loadStyle()
+    }
 }

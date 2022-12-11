@@ -11,6 +11,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import com.magical.map.core.MapController
 import com.magical.map.layer.MapLayer
+import com.magical.map.layer.MapLayerList
 
 /**
  * 地图容器，可以看成一个地图代理类。
@@ -134,6 +135,11 @@ abstract class MagicalMapView : FrameLayout {
      * 移除图层
      */
     abstract fun removeLayer(layer: MapLayer): Boolean
+
+    /**
+     * 图层重新排序
+     */
+    abstract fun resortLayers(layers: MapLayerList)
 
     /**
      * 裁剪地图

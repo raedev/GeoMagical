@@ -47,7 +47,17 @@ dependencies {
     // gson
     implementation 'com.google.code.gson:gson:2.9.1'
     // 方位角库，请按需引用，项目库：https://github.com/raedev/android-compass
-    compileOnly 'com.github.raedev:compass:1.0.1'
+    compileOnly 'com.github.raedev:compass:1.0.2'
     // 定位库，请按需引用，项目库：https://github.com/raedev/magical-location-client
     compileOnly 'com.github.raedev:location:1.0.0'
+}
+
+if (new File(project.projectDir, "upload.gradle").exists()) {
+    ext {
+        ARTIFACT_URL = 'https://github.com/raedev/GeoMagical'
+        ARTIFACT_GROUP = 'com.magical'
+        ARTIFACT_ID = 'maps'
+        ARTIFACT_VERSION = '1.0.0'
+    }
+    apply from: 'upload.gradle'
 }

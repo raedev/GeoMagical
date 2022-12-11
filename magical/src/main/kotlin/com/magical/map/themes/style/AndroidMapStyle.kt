@@ -39,7 +39,7 @@ abstract class AndroidMapStyle(
     /**
      * 加载样式
      */
-    fun loadStyle(): MapStyle = apply {
+    protected fun loadStyle(): MapStyle = apply {
         if (this::mSymbol.isInitialized) return@apply
         val attr = context.obtainStyledAttributes(styleId, styleableRes)
         val helper = MapStyleParseHelper(name, context, attr)

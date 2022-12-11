@@ -7,6 +7,7 @@ import com.magical.map.core.MapController
 import com.magical.map.layer.LayerInfo
 import com.magical.map.layer.LayerType
 import com.magical.map.layer.LocationMapLayer
+import com.magical.map.utils.MapLog
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.io.File
@@ -19,12 +20,18 @@ import java.io.File
  * @copyright Copyright (c) https://github.com/raedev All rights reserved.
  */
 
-class MapLayerAutoLoader(
-    private val controller: MapController,
-    private val params: AutoLoaderParams,
+open class MapLayerAutoLoader(
+    protected val controller: MapController,
+    protected val params: AutoLoaderParams,
 ) {
-    private val context: MapContext
+
+    protected val context: MapContext
         get() = controller.mapContext
+
+
+    protected open fun onCreateConfigLoader(loader: LayerLoader): LayerLoader {
+        return loader
+    }
 
     /**
      * 加载图层
@@ -36,18 +43,29 @@ class MapLayerAutoLoader(
             LayerFileLoader(context, params.featureExtension, params.basemapExtension)
         val assetsLoader = AssetLayerConfigLoader(fileLoader)
         val configLoader = LayerConfigLoader(assetsLoader)
-        val layers = configLoader.loadLayers()
+        // 加载图层
+        val layers = onCreateConfigLoader(configLoader).loadLayers()
         // 图层正确性检查
         val result = mutableListOf<LayerInfo>()
         layers.forEach { layer ->
             // 没有图层类处理
-            if (layer.clazz.isNullOrBlank()) return@forEach
+            if (layer.clazz.isNullOrBlank()) {
+                MapLog.w("没有定义图层的Class处理：$layer")
+                return@forEach
+            }
             // 本地文件不存在
-            layer.path?.let { if (!File(it).exists()) return@forEach }
+            layer.path?.let {
+                if (!File(it).exists()) {
+                    MapLog.w("图层文件不存在：$layer")
+                    return@forEach
+                }
+            }
             when (layer.type) {
                 LayerType.Basemap.type, LayerType.Feature.type -> {
-                    if (layer.path.isNullOrBlank() && layer.url.isNullOrBlank()) return@forEach
-
+                    if (layer.path.isNullOrBlank() && layer.url.isNullOrBlank()) {
+                        MapLog.w("图层路径为空：$layer")
+                        return@forEach
+                    }
                 }
             }
             result.add(layer)
@@ -89,7 +107,7 @@ class MapLayerAutoLoader(
     /**
      * 当前位置居中
      */
-    private fun centerToLocation() {
+    protected fun centerToLocation() {
         MagicalLocationManager.getLastLocation(context.context)?.let {
             controller.mapView.setMapLevel(17f, false)
             controller.mapView.setCenter(it.longitude, it.latitude, false)

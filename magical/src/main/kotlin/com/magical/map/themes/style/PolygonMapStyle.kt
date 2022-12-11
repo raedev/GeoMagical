@@ -22,4 +22,8 @@ class PolygonMapStyle(context: Context, name: String, override val styleId: Int)
     override fun parseStyle(helper: MapStyleParseHelper): MapSymbol {
         return helper.parsePolygon()
     }
+
+    init {
+        loadStyle()
+    }
 }

@@ -90,23 +90,29 @@ class MapLayerList : Iterable<MapLayer> {
      * 1、按照图层类型分类排序
      * 2、按orderNo字段排序
      */
-    private fun sort() {
-        val basemap = mLayers.filter { it.layerInfo.type == LayerType.Basemap.type }.sortByOrderNo()
-        val other = mLayers.filter { it.layerInfo.type != LayerType.Basemap.type }.sortByOrderNo()
+    internal fun sort() {
+        val basemap =
+            mLayers.filter { it.layerInfo.type == LayerType.Basemap.type }.sortByLayerType()
+        val other = mLayers.filter { it.layerInfo.type != LayerType.Basemap.type }.sortByLayerType()
         mLayers.clear()
         // 底图位于最下面
         mLayers.addAll(basemap)
         // 其次是业务图层
         mLayers.addAll(other)
+        // 最后根据orderNo排序
     }
 
     /**
-     * 根据OrderNo字段排序
+     * 根据图层类型排序
      */
-    private fun List<MapLayer>.sortByOrderNo(): List<MapLayer> {
+    private fun List<MapLayer>.sortByLayerType(): List<MapLayer> {
         return this.sortedWith { a, b ->
-            a.layerInfo.type - b.layerInfo.type
+            // 先根据图层类型排序，再根据orderNo排序
+            val at = a.layerInfo.type
+            val bt = b.layerInfo.type
+            if (at == bt) a.layerInfo.orderNo - b.layerInfo.orderNo else at - bt
         }
     }
+
 
 }

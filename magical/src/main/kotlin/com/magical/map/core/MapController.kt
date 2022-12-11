@@ -60,6 +60,9 @@ open class MapController(
     /** 图层管理器 */
     val layerManager: MapLayerManager = MapLayerManager(mapView, mapContext)
 
+    /** 场景展示 */
+    val sceneController: MapSceneController by lazy { MapSceneController(this) }
+
     /**
      * 是否为默认的控制器
      */
@@ -67,11 +70,14 @@ open class MapController(
         get() = controllerName == DEFAULT_CONTROLLER_NAME
 
     init {
+        initController()
+    }
+
+    protected fun initController() {
         // 控制器关联生命周期
         addController(this)
         mapView.attachController(this)
         owner.lifecycle.addObserver(this)
-        MapLog.d("初始化控制器：$this")
     }
 
     /**
@@ -96,6 +102,8 @@ open class MapController(
             Lifecycle.Event.ON_DESTROY -> {
                 MapLog.d("销毁地图控制器")
                 source.lifecycle.removeObserver(this)
+                // 销毁场景
+                sceneController.destroy()
                 // 移除当前控制器
                 removeController(this)
                 // 通知地图销毁
@@ -106,4 +114,20 @@ open class MapController(
             else -> return
         }
     }
+
+    /**
+     * 获取当前地图场景
+     */
+    fun getCurrentScene(): MapScene? {
+        return sceneController.currentScene
+    }
+
+    /**
+     * 进入地图场景
+     * @return 如果场景进入成功，则传入的场景和返回的一致，否则返回当前地图占用的场景。
+     */
+    fun goScene(scene: MapScene): MapScene {
+        return sceneController.show(scene)
+    }
+
 }

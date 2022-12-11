@@ -11,7 +11,7 @@ import java.io.File
  * @date 2022/11/17
  * @copyright Copyright (c) https://github.com/raedev All rights reserved.
  */
-internal class LayerConfigLoader(
+class LayerConfigLoader(
     wrapper: LayerLoader
 ) : LayerLoaderDecorator(wrapper) {
 
@@ -29,11 +29,6 @@ internal class LayerConfigLoader(
         val result = mutableListOf<LayerInfo>()
         result.addAll(super.loadLayers())
         result.addAll(layers.values)
-//        layers.forEach {
-//            // 这里需要在上一个装饰者里面再适配一下图层信息
-//            val layer = wrapper.onAdapterLayerInfo(it.value)
-//            result.add(layer)
-//        }
         return result
     }
 

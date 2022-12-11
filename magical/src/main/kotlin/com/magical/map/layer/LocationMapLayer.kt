@@ -25,22 +25,22 @@ abstract class LocationMapLayer : MapLayer() {
     }
 
     /** 位置客户端 */
-    private lateinit var client: LocationClient
+    protected lateinit var client: LocationClient
 
     /** 方位角传感器 */
-    private lateinit var compassManager: CompassManager
+    protected lateinit var compassManager: CompassManager
 
     /** 当前位置信息 */
     protected var currentLocation: Location? = null
 
     /** 当前方位角信息 */
-    private var currentCompassInfo: CompassInfo? = null
+    protected var currentCompassInfo: CompassInfo? = null
 
     /** 上一次的方位角 */
-    private var lastAzimuth: Int = 0
+    protected var lastAzimuth: Int = 0
 
     /** 方位角回调周期，单位毫秒 */
-    private val compassDelay: Int = 500
+    protected var compassDelay: Int = 500
 
     /** 位置模式 */
     var locationMode: LocationMode = LocationMode.LOCATION
@@ -131,17 +131,23 @@ abstract class LocationMapLayer : MapLayer() {
     /**
      * 开始请求定位
      */
-    fun location() {
+    open fun location() {
         // 当前级别
         val mapview = magicalMapView ?: return
         val nextMode = this.nextLocationMode()
-        if (nextMode != LocationMode.COMPASS) {
-            // 恢复地图旋转
-            mapview.setMapRotation(0f, true)
-            compassManager.delay = compassDelay
-        } else {
+        // 陀螺仪模式
+        if (nextMode == LocationMode.COMPASS) {
+            this.locationMode = nextMode
             compassManager.delay = 0
+            if (mapview.getMapLevel() < 19f) {
+                mapview.setMapLevel(19f)
+            }
+            refresh()
+            return
         }
+        // 恢复地图旋转
+        mapview.setMapRotation(0f, true)
+        compassManager.delay = compassDelay
         if (mapview.getMapLevel() < 17f) {
             this.locationMode = LocationMode.LOCATION
             mapview.setMapLevel(17f)

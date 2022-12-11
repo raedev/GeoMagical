@@ -11,7 +11,7 @@ import java.io.File
  * @date 2022/11/17
  * @copyright Copyright (c) https://github.com/raedev All rights reserved.
  */
-internal abstract class LayerLoader(internal val mapContext: MapContext) {
+abstract class LayerLoader(internal val mapContext: MapContext) {
 
     private val gson by lazy { Gson() }
 
