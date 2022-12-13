@@ -1,5 +1,6 @@
 package com.magical.map.core
 
+import android.content.Context
 import android.os.Bundle
 
 /**
@@ -37,12 +38,19 @@ class MapSceneController(internal val controller: MapController) {
         current?.let { exitScene(it) }
         // 进入新的场景
         scene.sceneController = this
-        scene.onMapSceneCreated(controller, bundle)
+        scene.performMapSceneCreated(controller, bundle)
         // 通知改变
         listeners.forEach { it.onMapSceneChanged(current, scene) }
         // 更新场景
         currentScene = scene
         return scene
+    }
+
+    /**
+     * 分发事件
+     */
+    fun dispatchBackPressedEvent(context: Context): Boolean {
+        return currentScene?.onBackPressed(context) == true
     }
 
     /**

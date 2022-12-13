@@ -1,5 +1,7 @@
 package com.magical.map.layer
 
+import com.google.gson.Gson
+
 /**
  * 地图图层信息
  * @author RAE
@@ -7,7 +9,7 @@ package com.magical.map.layer
  * @copyright Copyright (c) https://github.com/raedev All rights reserved.
  */
 @Suppress("unused")
-data class LayerInfo(
+open class LayerInfo(
     // 图层名称
     var name: String,
     // 图层显示的名称
@@ -36,5 +38,9 @@ data class LayerInfo(
         return (Class.forName(this.clazz).newInstance() as MapLayer).also {
             it.layerInfo = this
         }
+    }
+
+    override fun toString(): String {
+        return Gson().toJson(this)
     }
 }
